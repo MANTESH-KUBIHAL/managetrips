@@ -1,0 +1,129 @@
+html, body {
+  height: 100%;
+}
+body{
+  padding: 0;
+  margin: 0;
+  background-image: url(./assets/loginbg.jpg);
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+.loginpage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.loginpage h1{
+  font-size: 3rem;
+  font-weight: bold;
+  background: linear-gradient(90deg,#ffffff, #ff0000, #ffffff);
+  background-size: 200%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 3s linear infinite;
+}
+@keyframes shine {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+.loginbox {
+  border: 2px solid rgb(41, 232, 232);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10%;
+  border-radius: 20px;
+  background-image: url(./assets/loginboxbg.avif);
+  background-size: cover;
+  background-position: center;
+}
+input{
+  border-radius: 20px;
+  padding-left: 5px;
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #3cd5fb;
+  margin: 5px;
+}
+input::placeholder{
+  padding-left: 28%;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+}
+input:hover{
+  border: 2px solid yellow;
+}
+button{
+  border-radius: 15px;
+  padding: 10px;
+  background: linear-gradient(#ef4444, #3b82f6);
+  border: 2px solid rgb(32, 192, 245);
+}
+button:hover{
+  border: 2px solid yellow;
+  background: linear-gradient(#ff0000, #0062ff);
+}
+button:active{
+  background: linear-gradient(#000000, #000000);
+}
+input::placeholder{
+  color: #ffffff;
+}
+select{
+  border-radius: 15px;
+  padding: 10px;
+  color: crimson;
+  margin: 7px;
+  border: 2px solid skyblue;
+}
+select:hover{
+  border: 2px solid yellow;
+}
+
+.taskbar{
+  padding: 1%;
+}
+.values{
+  justify-content: space-evenly;
+  display: flex;
+}
+.box1{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  color: rgb(234, 231, 13);
+}
+.boxes{
+  justify-content: space-evenly;
+  display: flex;
+  color: white;
+  font-size: 17px;
+}
+.box2, .box3{
+  border: 2px solid rgb(38, 170, 214);
+  padding: 10%;
+  border-radius: 20px;
+  background-image: url(./assets/box2bg.jpg);
+  background-size: cover;
+  background-position: center;
+  min-width: 22%;
+}
+.feedbacks{
+  margin: 5%;
+  color: crimson;
+
+}
+.triplist{
+  margin-top: 5%;
+}
+.feedbacks input, .feedbacks select{
+  background-color: #ef4444;
+}

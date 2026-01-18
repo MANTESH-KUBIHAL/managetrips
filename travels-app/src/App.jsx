@@ -65,6 +65,13 @@ useEffect(() => {
   emailjs.init("qAY2OqQOmikzQ62Dr"); // SAME PUBLIC KEY
 }, []);
 
+    useEffect(() => {
+  fetch("https://managetrips.onrender.com/trips")
+    .then(res => res.json())
+    .then(data => setTrips(data));
+}, []);
+
+
 
 function sendTripEmail(trip) {
   const driver = drivers.find(d => d.username === trip.driver);
@@ -119,7 +126,7 @@ async function handleBookingSubmit(tripData) {
 
   // 5️⃣ Send trip to backend
   try {
-    const response = await fetch("https://managetrips.onrender.com/trips", {
+    const response = await fetch("https://managetrips.onrender.com/add-trip", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

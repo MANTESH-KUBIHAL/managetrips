@@ -1,180 +1,87 @@
 const express = require("express");
 const cors = require("cors");
-const mysql = require('mysql2');
-
-const db = mysql.createConnection({
-  host: mysql.railway.internal,
-  user: root,
-  password: LPfpQOBAtQvnSRMJsDViyHLBmqRDGCmM,
-  database: railway
-});
-
-db.connect(err => {
-  if (err) console.error("❌ DB Connection failed:", err.message);
-  else console.log("✅ DB connected");
-});
-
+const mysql = require("mysql2");
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-
-// 🔌 MySQL connection
+// 🔌 MySQL connection (Railway)
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root123",   // same password
-  database: "tripdb"
+  host: "mysql.railway.internal",  // your Railway host
+  user: "root",                     // your Railway DB user
+  password: "LPfpQOBAtQvnSRMJsDViyHLBmqRDGCmM", // Railway DB password
+  database: "railway"               // Railway DB name
 });
-
 
 db.connect(err => {
   if (err) {
-    console.error("❌ MySQL connection failed:", err.message);
+    console.error("❌ DB Connection failed:", err.message);
     return;
-  } else {
-    console.log("✅ MySQL connected");
   }
+  console.log("✅ DB connected to Railway");
 });
 
-// test route
-app.get("/", (req, res) => {
-  res.send("Backend is running");
-});
+// --- Routes ---
+app.get("/", (req, res) => res.send("Backend is running"));
 
-// 🚕 add trip route
+// Add trip
 app.post("/add-trip", (req, res) => {
   const { from, to, fare, driverPay, driver } = req.body;
-
-  console.log("📥 Trip received:", req.body);
-
   const sql = `
-    INSERT INTO trips (
-      from_location,
-      to_location,
-      fare,
-      driver_pay,
-      driver_username
-    )
+    INSERT INTO trips (from_location, to_location, fare, driver_pay, driver_username)
     VALUES (?, ?, ?, ?, ?)
   `;
+  db.query(sql, [from, to, fare, driverPay, driver], (err, result) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+    res.json({ message: "Trip saved successfully" });
+  });
+});
 
+// Get all trips
+app.get("/trips", (req, res) => {
+  db.query("SELECT * FROM trips ORDER BY created_at DESC", (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
+    res.json(results);
+  });
+});
+
+// Get trips for a specific driver
+app.get("/trips/:driverUsername", (req, res) => {
+  const { driverUsername } = req.params;
   db.query(
-    sql,
-    [from, to, fare, driverPay, driver],
-    (err, result) => {
-      if (err) {
-        console.error("❌ DB insert error:", err);
-        res.status(500).json({ error: "Database error" });
-      } else {
-        console.log("✅ Trip saved to database");
-        res.json({ message: "Trip saved successfully" });
-      }
+    "SELECT * FROM trips WHERE driver_username = ? ORDER BY created_at DESC",
+    [driverUsername],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: "Database error" });
+      res.json(results);
     }
   );
 });
 
-
-// 📤 get all trips
-app.get("/trips", (req, res) => {
-  const sql = "SELECT * FROM trips ORDER BY created_at DESC";
-
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("❌ Fetch trips error:", err);
-      return res.status(500).json({ error: "Database error" });
-    }
-
-    res.json(results);
-  });
-});
-
-
-
-
-
-
-//onlydriver//
-
-// 🚕 get trips for a specific driver
-app.get("/trips/:driverUsername", (req, res) => {
-  const { driverUsername } = req.params;
-
-  const sql = `
-    SELECT * FROM trips
-    WHERE driver_username = ?
-    ORDER BY created_at DESC
-  `;
-
-  db.query(sql, [driverUsername], (err, results) => {
-    if (err) {
-      console.error("❌ Fetch driver trips error:", err);
-      return res.status(500).json({ error: "Database error" });
-    }
-
-    res.json(results);
-  });
-});
-
-
-
-
-
-//usere
-
-// 👤 get user by username
+// Get user by username
 app.get("/user/:username", (req, res) => {
-  const { username } = req.params;
-
-  const sql = "SELECT * FROM users WHERE username = ?";
-
-  db.query(sql, [username], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "DB error" });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
+  db.query("SELECT * FROM users WHERE username = ?", [req.params.username], (err, result) => {
+    if (err) return res.status(500).json({ error: "DB error" });
+    if (result.length === 0) return res.status(404).json({ error: "User not found" });
     res.json(result[0]);
   });
 });
 
-
-
-//get drivers
 // Get all drivers
 app.get("/drivers", (req, res) => {
-  const sql = "SELECT * FROM users WHERE role = 'driver'";
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error("❌ DB error:", err);
-      return res.status(500).json({ error: "Database error" });
-    }
+  db.query("SELECT * FROM users WHERE role = 'driver'", (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
     res.json(results);
   });
 });
 
-// Update user balance (after a trip)
+// Update user balance
 app.put("/user/:username/balance", (req, res) => {
-  const { username } = req.params;
-  const { newBalance } = req.body;
-
-  const sql = "UPDATE users SET balance = ? WHERE username = ?";
-  db.query(sql, [newBalance, username], (err, result) => {
-    if (err) {
-      console.error("❌ DB update error:", err);
-      return res.status(500).json({ error: "Database error" });
-    }
+  db.query("UPDATE users SET balance = ? WHERE username = ?", [req.body.newBalance, req.params.username], (err, result) => {
+    if (err) return res.status(500).json({ error: "Database error" });
     res.json({ message: "Balance updated" });
   });
 });
 
-
-app.listen(5000, () => {
-  console.log("🚀 Backend started on port 5000");
-});
+app.listen(5000, () => console.log("🚀 Backend started on port 5000"));

@@ -8,11 +8,11 @@ app.use(express.json());
 
 // 🔌 MySQL connection (Railway)
 const db = mysql.createConnection({
-  host: "mysql://root:LPfpQOBAtQvnSRMJsDViyHLBmqRDGCmM@crossover.proxy.rlwy.net:10298/railway",  // your Railway host
+  host: "crossover.proxy.rlwy.net",  // your Railway host
   user: "root",                     // your Railway DB user
   password: "LPfpQOBAtQvnSRMJsDViyHLBmqRDGCmM", // Railway DB password
   database: "railway",               // Railway DB name
-  port: "3306"
+  port: "10298"
 });
 
 db.connect(err => {

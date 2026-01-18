@@ -125,23 +125,35 @@ async function handleBookingSubmit(tripData) {
   sendTripEmail(tripData);
 
   // 5️⃣ Send trip to backend
-  try {
-    const response = await fetch("https://managetrips.onrender.com/add-trip", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(tripData)
-    });
+  // 5️⃣ Send trip to backend
+try {
+  const response = await fetch("https://managetrips.onrender.com/trips", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from_location: tripData.from,
+      to_location: tripData.to,
+      fare: tripData.fare,
+      driver_pay: tripData.driverPay,
+      driver_username: tripData.driver
+    })
+  });
 
-    if (response.ok) {
-      console.log("✅ Trip sent to backend");
-    } else {
-      console.error("❌ Backend error");
-    }
-  } catch (error) {
-    console.error("❌ Network error", error);
+  if (response.ok) {
+    console.log("✅ Trip sent to backend");
+
+    // ✅ RE-FETCH trips from backend
+    const data = await fetch("https://managetrips.onrender.com/trips")
+      .then(res => res.json());
+    setTrips(data);  // now your state is perfectly synced with backend
+  } else {
+    console.error("❌ Backend error");
   }
+} catch (error) {
+  console.error("❌ Network error", error);
+}
 }
 
 
@@ -333,11 +345,14 @@ function ManagerHome({ manager, drivers, trips }) {
       <div className="feedbacks">
         <h3>Total Trips:</h3>
         <ul>
-  {trips.map((trip, index) => (
-    <li key={index}>
-      {trip.from} → {trip.to} | Rs:{trip.fare} | Driver Pay Rs:{trip.driverPay}
-    </li>
-  ))}
+  {trips.map(trip => (
+  <li key={trip.id}>
+    {trip.from_location} → {trip.to_location} |
+    Rs:{trip.fare} |
+    Driver Pay Rs:{trip.driver_pay}
+  </li>
+))}
+
 </ul>
 
       </div>
@@ -368,11 +383,14 @@ function ManagerAccount(){
         Previous Transactions
       </h1>
       <ul>
-  {trips.map((trip, index) => (
-    <li key={index}>
-      {trip.from} → {trip.to} | Rs:{trip.fare} | Driver Pay Rs:{trip.driverPay}
-    </li>
-  ))}
+ {trips.map(trip => (
+  <li key={trip.id}>
+    {trip.from_location} → {trip.to_location} |
+    Rs:{trip.fare} |
+    Driver Pay Rs:{trip.driver_pay}
+  </li>
+))}
+
 </ul>
 
     </div>

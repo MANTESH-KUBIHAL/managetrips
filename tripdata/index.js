@@ -1,6 +1,19 @@
 const express = require("express");
 const cors = require("cors");
-const mysql = require("mysql2");
+const mysql = require('mysql2');
+
+const db = mysql.createConnection({
+  host: mysql.railway.internal,
+  user: root,
+  password: LPfpQOBAtQvnSRMJsDViyHLBmqRDGCmM,
+  database: railway
+});
+
+db.connect(err => {
+  if (err) console.error("❌ DB Connection failed:", err.message);
+  else console.log("✅ DB connected");
+});
+
 
 const app = express();
 

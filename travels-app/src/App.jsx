@@ -119,7 +119,7 @@ async function handleBookingSubmit(tripData) {
 
   // 5️⃣ Send trip to backend
   try {
-    const response = await fetch("http://localhost:5000/add-trip", {
+    const response = await fetch("https://managetrips.onrender.com/trips", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -164,7 +164,7 @@ function Home({ driver }) {
   const [myTrips, setMyTrips] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/trips/${driver.username}`)
+    fetch(`https://managetrips.onrender.com/trips/${driver.username}`)
       .then(res => res.json())
       .then(data => setMyTrips(data))
       .catch(err => console.error("Trip fetch error", err));
@@ -230,7 +230,7 @@ function Assigned({ driver }) {
   const [myTrips, setMyTrips] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/trips/${driver.username}`)
+    fetch(`https://managetrips.onrender.com/trips/${driver.username}`)
       .then(res => res.json())
       .then(data => setMyTrips(data))
       .catch(err => console.error("Assigned trips fetch error", err));

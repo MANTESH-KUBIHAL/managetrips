@@ -31,3 +31,4 @@ jobs:
         with:
           branch: gh-pages         # branch to deploy to
           folder: travels-app/dist  # <-- changed from build/ to dist/
+          token: ${{ secrets.GITHUB_TOKEN }}

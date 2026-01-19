@@ -28,7 +28,7 @@ app.get("/", (req, res) => res.send("Backend is running"));
 
 // Add trip
 app.post("/add-trip", (req, res) => {
-  const { from, to, fare, driverPay, driver } = req.body;
+  const { from_location, to_location, fare, driver_pay, driver_username } = req.body;
   const sql = `
     INSERT INTO trips (from_location, to_location, fare, driver_pay, driver_username)
     VALUES (?, ?, ?, ?, ?)

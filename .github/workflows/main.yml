@@ -3,7 +3,7 @@ name: Deploy React App to GitHub Pages
 on:
   push:
     branches:
-      - main   # or your default branch
+      - main
 
 jobs:
   build-deploy:
@@ -20,17 +20,17 @@ jobs:
         with:
           node-version: '20'
 
-      # 3️⃣ Install dependencies in React app folder
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install
         working-directory: travels-app
 
-      # 4️⃣ Build app (dist folder)
+      # 4️⃣ Build app
       - name: Build React app
         run: npm run build
         working-directory: travels-app
 
-      # 5️⃣ Deploy to gh-pages
+      # 5️⃣ Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
@@ -39,4 +39,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           clean: true                     # remove old files
           commit-message: "Deploy React app from GitHub Actions 🚀"
-          force-orphan: true              # prevents history conflicts
+          force-orphan: true              # force new history to prevent conflicts

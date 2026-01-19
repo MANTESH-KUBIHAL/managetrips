@@ -3,31 +3,36 @@ name: Deploy React App to GitHub Pages
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main   # or your default branch
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      # 2️⃣ Setup Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # 3️⃣ Install dependencies in React app folder
       - name: Install dependencies
         run: npm install
-        working-directory: travels-app    # <-- point to your React app folder
+        working-directory: travels-app
 
+      # 4️⃣ Build React app
       - name: Build app
         run: npm run build
-        working-directory: travels-app    # <-- same here
+        working-directory: travels-app
 
+      # 5️⃣ Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
-          branch: gh-pages
-          folder: travels-app/build       # <-- correct build folder path
+          branch: gh-pages          # branch to deploy to
+          folder: travels-app/build  # path to build folder

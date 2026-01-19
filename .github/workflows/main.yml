@@ -3,7 +3,7 @@ name: Deploy React App to GitHub Pages
 on:
   push:
     branches:
-      - main   # or your branch name
+      - main
 
 jobs:
   build:
@@ -19,13 +19,15 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
+        working-directory: managetrips   # <--- Add this line
         run: npm install
 
       - name: Build app
+        working-directory: managetrips   # <--- Add this line
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
-          branch: gh-pages   # the branch where built files get published
-          folder: build      # build output folder
+          branch: gh-pages
+          folder: managetrips/build         # <--- Update folder path

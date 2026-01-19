@@ -127,19 +127,20 @@ async function handleBookingSubmit(tripData) {
   // 5️⃣ Send trip to backend
   // 5️⃣ Send trip to backend
 try {
-  const response = await fetch("https://managetrips.onrender.com/trips", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      from_location: tripData.from,
-      to_location: tripData.to,
-      fare: tripData.fare,
-      driver_pay: tripData.driverPay,
-      driver_username: tripData.driver
-    })
-  });
+  const response = await fetch("https://managetrips.onrender.com/add-trip", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    from: tripData.from,
+    to: tripData.to,
+    fare: tripData.fare,
+    driverPay: tripData.driverPay,
+    driver: tripData.driver
+  })
+});
+
 
   if (response.ok) {
     console.log("✅ Trip sent to backend");

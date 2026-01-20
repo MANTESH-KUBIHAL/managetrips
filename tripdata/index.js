@@ -22,6 +22,16 @@ const db = mysql.createPool({
 
 console.log("✅ MySQL pool initialized");
 
+db.getConnection((err, connection) => {
+  if (err) {
+    console.error("❌ DB pool connection failed:", err.message);
+  } else {
+    console.log("✅ DB pool connected");
+    connection.release();
+  }
+});
+
+
 // --- Routes ---
 app.get("/", (req, res) => res.send("Backend is running"));
 

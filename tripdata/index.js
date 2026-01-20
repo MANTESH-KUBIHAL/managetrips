@@ -46,7 +46,7 @@ app.post("/add-trip", async (req, res) => {
 // Get all trips
 app.get("/trips", (req, res) => {
   db.query("SELECT * FROM trips ORDER BY created_at DESC", (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
+    if (err) return res.status(500).json({ error: "Database error", details: err.message });
     res.json(results);
   });
 });
@@ -58,7 +58,7 @@ app.get("/trips/:driverUsername", (req, res) => {
     "SELECT * FROM trips WHERE driver_username = ? ORDER BY created_at DESC",
     [driverUsername],
     (err, results) => {
-      if (err) return res.status(500).json({ error: "Database error" });
+      if (err) return res.status(500).json({ error: "Database error", details: err.message });
       res.json(results);
     }
   );

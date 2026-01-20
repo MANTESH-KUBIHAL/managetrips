@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -20,13 +21,15 @@ const db = mysql.createPool({
 
 
 
-db.connect(err => {
-  if (err) {
-    console.error("❌ DB Connection failed:", err.message);
-    return;
-  }
-  console.log("✅ DB connected to Railway");
-});
+// db.connect(err => {
+//   if (err) {
+//     console.error("❌ DB Connection failed:", err.message);
+//     return;
+//   }
+//   console.log("✅ DB connected to Railway");
+// });
+
+console.log("✅ MySQL pool initialized");
 
 // --- Routes ---
 app.get("/", (req, res) => res.send("Backend is running"));

@@ -20,15 +20,6 @@ const db = mysql.createPool({
 });
 
 
-
-// db.connect(err => {
-//   if (err) {
-//     console.error("❌ DB Connection failed:", err.message);
-//     return;
-//   }
-//   console.log("✅ DB connected to Railway");
-// });
-
 console.log("✅ MySQL pool initialized");
 
 // --- Routes ---

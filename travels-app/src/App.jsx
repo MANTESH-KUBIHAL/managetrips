@@ -545,22 +545,22 @@ function DriverPage({ driver,trips, onLogout }) {
     <>
       <div className="taskbar">
         <div className="values">
-          <Link to="/home"><button>Home</button></Link>
-          <Link to="/account"><button>Account</button></Link>
-          <Link to="/assigned"><button>Assigned</button></Link>
-          <Link to="/feedback"><button>Feedback</button></Link>
-          <Link to="/logout"><button>Logout</button></Link>
+          <Link to="home"><button>Home</button></Link>
+          <Link to="account"><button>Account</button></Link>
+          <Link to="assigned"><button>Assigned</button></Link>
+          <Link to="feedback"><button>Feedback</button></Link>
+          <Link to="logout"><button>Logout</button></Link>
 
         </div>
       </div>
 
         <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<Home driver={driver} trips={trips} />} />
-          <Route path="/account" element={<Account driver={driver} trips={trips}/>} />
-          <Route path="/assigned" element={<Assigned driver={driver} trips={trips} />} />
-          <Route path="/feedback" element={<Feedback driver={driver} />} />
-          <Route path="/logout" element={<Logout onLogout={onLogout} />} />
+          <Route path="/" element={<Navigate to="home" replace />} />
+          <Route path="home" element={<Home driver={driver} trips={trips} />} />
+          <Route path="account" element={<Account driver={driver} trips={trips}/>} />
+          <Route path="assigned" element={<Assigned driver={driver} trips={trips} />} />
+          <Route path="feedback" element={<Feedback driver={driver} />} />
+          <Route path="logout" element={<Logout onLogout={onLogout} />} />
         </Routes>
     </>
   );
@@ -572,10 +572,10 @@ function ManagerPage({manager, drivers, trips}) {
     <>
       <div className="taskbar">
         <div className="values">
-          <Link to="/managerhome"><button>Home</button></Link>
-          <Link to="/manageraccount"><button>Account</button></Link>
-          <Link to="/managerfeedback"><button>Feedback</button></Link>
-          <Link to="/booking"><button>Bookings</button></Link>
+          <Link to="managerhome"><button>Home</button></Link>
+          <Link to="manageraccount"><button>Account</button></Link>
+          <Link to="managerfeedback"><button>Feedback</button></Link>
+          <Link to="booking"><button>Bookings</button></Link>
 
           <button onClick={handleLogout}>Logout</button>
         </div>
@@ -586,7 +586,7 @@ function ManagerPage({manager, drivers, trips}) {
   <Route
     path="/"
     element={
-      <Navigate to="/managerhome" 
+      <Navigate to="managerhome" 
       replace
       />
     }
@@ -594,7 +594,7 @@ function ManagerPage({manager, drivers, trips}) {
 
 
   <Route
-    path="/managerhome"
+    path="managerhome"
     element={
       <ManagerHome
         manager={manager}
@@ -605,17 +605,17 @@ function ManagerPage({manager, drivers, trips}) {
   />
 
   <Route
-    path="/manageraccount"
+    path="manageraccount"
     element={<ManagerAccount manager={manager} />}
   />
 
   <Route
-    path="/managerfeedback"
+    path="managerfeedback"
     element={<ManagerFeedback manager={manager} />}
   />
 
   <Route
-    path="/booking"
+    path="booking"
     element={
       <Booking
         drivers={drivers}
@@ -630,7 +630,7 @@ function ManagerPage({manager, drivers, trips}) {
 }
 
 return (
-  <BrowserRouter basename='/managetrips'>
+  <BrowserRouter>
 
 {currentUser?.role === "driver" && (
   <DriverPage

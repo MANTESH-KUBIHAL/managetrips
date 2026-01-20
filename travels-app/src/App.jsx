@@ -630,7 +630,7 @@ function ManagerPage({manager, drivers, trips}) {
 }
 
 return (
-  <BrowserRouter>
+  <BrowserRouter basename='/managetrips'>
 
 {currentUser?.role === "driver" && (
   <DriverPage

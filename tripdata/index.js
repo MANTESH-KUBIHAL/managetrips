@@ -8,12 +8,14 @@ app.use(express.json());
 
 // 🔌 MySQL connection (Railway)
 const db = mysql.createConnection({
-  host: "crossover.proxy.rlwy.net",  // your Railway host
-  user: "root",                     // your Railway DB user
-  password: "LPfpQOBAtQvnSRMJsDViyHLBmqRDGCmM", // Railway DB password
-  database: "railway",               // Railway DB name
-  port: "10298"
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT)
 });
+
+
 
 db.connect(err => {
   if (err) {
@@ -27,17 +29,19 @@ db.connect(err => {
 app.get("/", (req, res) => res.send("Backend is running"));
 
 // Add trip
-app.post("/add-trip", (req, res) => {
-  const { from_location, to_location, fare, driver_pay, driver_username } = req.body;
-  const sql = `
-    INSERT INTO trips (from_location, to_location, fare, driver_pay, driver_username)
-    VALUES (?, ?, ?, ?, ?)
-  `;
+app.post("/add-trip", async (req, res) => {
+  const { from, to, fare, driverPay, driver } = req.body; // match frontend
+
+  const sql = 
+  `INSERT INTO trips (from_location, to_location, fare, driver_pay, driver_username)
+    VALUES (?, ?, ?, ?, ?)`;
+
   db.query(sql, [from, to, fare, driverPay, driver], (err, result) => {
-    if (err) return res.status(500).json({ error: "Database error" });
+    if (err) return res.status(500).json({ error: "Database error", details: err });
     res.json({ message: "Trip saved successfully" });
   });
 });
+
 
 // Get all trips
 app.get("/trips", (req, res) => {
@@ -63,8 +67,8 @@ app.get("/trips/:driverUsername", (req, res) => {
 // Get user by username
 app.get("/user/:username", (req, res) => {
   db.query("SELECT * FROM users WHERE username = ?", [req.params.username], (err, result) => {
-    if (err) return res.status(500).json({ error: "DB error" });
-    if (result.length === 0) return res.status(404).json({ error: "User not found" });
+    if (err) return res.status(500).json({ error: "DB error", details: err.message });
+    if (result.length === 0) return res.status(404).json({ error: "User not found", details: err.message });
     res.json(result[0]);
   });
 });
@@ -72,7 +76,7 @@ app.get("/user/:username", (req, res) => {
 // Get all drivers
 app.get("/drivers", (req, res) => {
   db.query("SELECT * FROM users WHERE role = 'driver'", (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
+    if (err) return res.status(500).json({ error: "Database error", details: err.message });
     res.json(results);
   });
 });
@@ -80,7 +84,7 @@ app.get("/drivers", (req, res) => {
 // Update user balance
 app.put("/user/:username/balance", (req, res) => {
   db.query("UPDATE users SET balance = ? WHERE username = ?", [req.body.newBalance, req.params.username], (err, result) => {
-    if (err) return res.status(500).json({ error: "Database error" });
+    if (err) return res.status(500).json({ error: "Database error", details: err.message });
     res.json({ message: "Balance updated" });
   });
 });

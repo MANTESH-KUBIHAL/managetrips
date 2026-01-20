@@ -7,12 +7,15 @@ app.use(cors());
 app.use(express.json());
 
 // 🔌 MySQL connection (Railway)
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT)
+  port: Number(process.env.DB_PORT),
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 
@@ -45,7 +48,7 @@ app.post("/add-trip", async (req, res) => {
 
 // Get all trips
 app.get("/trips", (req, res) => {
-  db.query("SELECT * FROM trips ORDER BY created_at DESC", (err, results) => {
+  db.query("SELECT * FROM trips", (err, results) => {
     if (err) return res.status(500).json({ error: "Database error", details: err.message });
     res.json(results);
   });

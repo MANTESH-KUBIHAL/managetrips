@@ -1,10 +1,12 @@
 import { Routes, Route, Link } from "react-router-dom"
 import { useState } from "react"
 import "./App.css"
+import { useEffect } from "react";
 
 
 // page components
 const Home = () =>{
+
 return (
   <>
   <div className="hedding">
@@ -20,7 +22,7 @@ return (
   </div>
   <div className="avloff">
     <div className="headss">
-      <span>No offers avaliable at this time</span>
+      <span>No offers avaliable at this time {bookingss}</span>
     </div>
   </div>
   </>
@@ -62,7 +64,7 @@ const Bookings = () => {
       gender: gender,
     };
 
-    fetch("http://localhost:5000/bookings", {
+    fetch("https://managetrips.onrender.com/bookings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -176,6 +178,7 @@ const Payments = () => {
     </>
   )};
 
+
 function App() {
   return (
     <div className="pagebdy">
@@ -201,5 +204,7 @@ function App() {
     </div>
   )
 }
+
+
 
 export default App;

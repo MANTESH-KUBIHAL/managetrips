@@ -5,28 +5,53 @@ import { useEffect } from "react";
 
 
 // page components
-const Home = () =>{
+const Home = () => {
+  const [bookingss, setbookingss] = useState([]);
 
-return (
-  <>
-  <div className="hedding">
-    <h2>Home Page</h2>
-  </div>
-  <div className="boxess">
-    <div className="box1">
-      <h5>Hi! there welcome</h5>
-    </div>
-    <div className="box2">
-      <h5>Planning a trip?</h5>
-    </div>
-  </div>
-  <div className="avloff">
-    <div className="headss">
-      <span>No offers avaliable at this time {bookingss}</span>
-    </div>
-  </div>
-  </>
-)}; 
+  useEffect(() => {
+    fetch("https://managetrips.onrender.com/bookings")
+      .then((res) => res.json())
+      .then((data) => setbookingss(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  return (
+    <>
+      <div className="hedding">
+        <h2>Home Page</h2>
+      </div>
+
+      <div className="boxess">
+        <div className="box1">
+          <h5>Hi! there welcome</h5>
+        </div>
+        <div className="box2">
+          <h5>Planning a trip?</h5>
+        </div>
+      </div>
+
+      <div className="avloff">
+        <div className="headss">
+          <h4>Recent Bookings</h4>
+
+          {bookingss.length === 0 ? (
+            <span>No bookings available</span>
+          ) : (
+            bookingss.slice(0, 3).map((b) => (
+              <div key={b.id} className="booking-card">
+                <p><b>From:</b> {b.from_location}</p>
+                <p><b>To:</b> {b.to_location}</p>
+                <p><b>People:</b> {b.people_count}</p>
+                <p><b>Gender:</b> {b.gender}</p>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </>
+  );
+};
+
 
 const Account = () => {
   return (<>

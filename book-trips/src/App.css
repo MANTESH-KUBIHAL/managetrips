@@ -56,3 +56,9 @@ display: flex;
 .bookinginputs button{
     border-radius: 10px;
 }
+.booking-card {
+  background: #f1f1f1;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+}

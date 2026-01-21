@@ -85,4 +85,32 @@ app.put("/user/:username/balance", (req, res) => {
   });
 });
 
+
+app.post("/bookings", (req, res) => {
+  console.log("Incoming booking:", req.body);
+
+  const { from_location, to_location, people_count, gender } = req.body;
+
+if (!from_location || !to_location || !gender || Number(people_count) <= 0) {
+  return res.status(400).json({ message: "Invalid input" });
+}
+
+  const sql =
+    "INSERT INTO bookings (from_location, to_location, people_count, gender) VALUES (?, ?, ?, ?)";
+
+db.query(
+  sql,
+  [from_location, to_location, Number(people_count), gender],
+  (err) => {
+    if (err) {
+      console.error("DB ERROR:", err);
+      return res.status(500).json({ message: "DB Error" });
+    }
+    res.json({ message: "Booking stored" });
+  }
+);
+});
+
+
+
 app.listen(5000, () => console.log("🚀 Backend started on port 5000"));

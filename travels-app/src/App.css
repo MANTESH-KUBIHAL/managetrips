@@ -119,7 +119,7 @@ select:hover{
 }
 .feedbacks{
   margin: 5%;
-  color: rgb(234, 11, 11);
+  color: rgb(255, 255, 255);
   align-items: center;
   justify-content: center;
   display: flex;

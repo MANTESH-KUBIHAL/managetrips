@@ -184,5 +184,38 @@ app.post("/api/products", (req, res) => {
   );
 });
 
+// ===============================
+// 🛒 CART APIs
+// ===============================
+
+// GET all cart items
+app.get("/api/cart", (req, res) => {
+  const sql = "SELECT * FROM cart ORDER BY created_at DESC";
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ message: "Database error", details: err.message });
+    res.json(results);
+  });
+});
+
+// POST add product to cart
+app.post("/api/cart", (req, res) => {
+  const { product_id, name, price, rating, image, description } = req.body;
+
+  if (!product_id || !name || !price) {
+    return res.status(400).json({ message: "Product ID, name, and price are required" });
+  }
+
+  const sql = `
+    INSERT INTO cart (product_id, name, price, rating, image, description)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(sql, [product_id, name, price, rating || 0, image || null, description || null], (err, result) => {
+    if (err) return res.status(500).json({ message: "Database error", details: err.message });
+    res.status(201).json({ message: "Product added to cart", cartId: result.insertId });
+  });
+});
+
+
 
 app.listen(5000, () => console.log("🚀 Backend started on port 5000"));

@@ -136,4 +136,53 @@ app.get("/bookings", (req, res) => {
   );
 });
 
+
+// ===============================
+// 🛒 PRODUCTS APIs (DigMarket)
+// ===============================
+
+// GET all products
+app.get("/api/products", (req, res) => {
+  const sql = "SELECT * FROM products ORDER BY created_at DESC";
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("❌ Products fetch error:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+    res.json(results);
+  });
+});
+
+// POST add new product
+app.post("/api/products", (req, res) => {
+  const { name, price, rating, image, description } = req.body;
+
+  if (!name || !price) {
+    return res.status(400).json({ message: "Name and price are required" });
+  }
+
+  const sql = `
+    INSERT INTO products (name, price, rating, image, description)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [name, price, rating || 0, image || null, description || null],
+    (err, result) => {
+      if (err) {
+        console.error("❌ Product insert error:", err);
+        return res.status(500).json({ message: "Database error" });
+      }
+
+      res.status(201).json({
+        message: "Product added successfully",
+        productId: result.insertId
+      });
+    }
+  );
+});
+
+
 app.listen(5000, () => console.log("🚀 Backend started on port 5000"));
